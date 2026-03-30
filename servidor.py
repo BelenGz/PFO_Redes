@@ -1,6 +1,6 @@
 import socket
 import sqlite3
-import threading # Nueva librería para concurrencia (Semana 4)
+import threading # Librería para concurrencia
 from datetime import datetime
 
 # Función para guardar en la base de datos
@@ -22,7 +22,7 @@ def guardar_mensaje(contenido, ip):
         print(f"Error en DB: {e}")
         return "Error en DB"
 
-# Nueva función que ejecutará cada hilo de forma independiente
+# Función que ejecutará cada hilo de forma independiente (Worker Thread)
 def manejar_cliente(cliente_socket, ip_cliente):
     try:
         # Recibir datos del cliente
@@ -42,12 +42,13 @@ def manejar_cliente(cliente_socket, ip_cliente):
         cliente_socket.close()
         print(f"Conexión con {ip_cliente} finalizada.")
 
+# --- Configuración del Socket TCP/IP y Loop Principal ---
 def iniciar_servidor():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
     try:
         server_socket.bind(('localhost', 5000))
-        server_socket.listen(10) # Aumentamos el límite de cola de espera
+        server_socket.listen(10) # Aumento del límite de cola de espera
         print("Servidor CONCURRENTE iniciado en localhost:5000...")
         
         while True:
@@ -56,11 +57,11 @@ def iniciar_servidor():
             ip_cliente = direccion[0]
             print(f"Nueva conexión desde: {ip_cliente}")
             
-            # --- CONCURRENCIA (Semana 4) ---
-            # Creamos un hilo para que atienda a este cliente
+            # --- CONCURRENCIA ---
+            # Se crea un hilo para que atienda a este cliente
             # Esto evita que el servidor se bloquee mientras guarda en la DB
             hilo = threading.Thread(target=manejar_cliente, args=(cliente_socket, ip_cliente))
-            hilo.start() # Iniciamos el hilo
+            hilo.start()
             
     except socket.error as e:
         print(f"Error de socket: {e}")

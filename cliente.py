@@ -1,5 +1,6 @@
 import socket
 
+# --- Configuración y Ciclo de Vida del Cliente ---
 def iniciar_cliente():
     host = 'localhost'
     puerto = 5000
@@ -16,11 +17,14 @@ def iniciar_cliente():
             break
 
         try:
+            # Configuración de conexión por cada mensaje
             cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             cliente_socket.connect((host, puerto))
-
+            
+            # Serialización y envío
             cliente_socket.send(mensaje.encode('utf-8'))
 
+            # Recepción de confirmación del servidor
             respuesta = cliente_socket.recv(1024).decode('utf-8')
             print(f"Respuesta del Servidor -> {respuesta}")
 

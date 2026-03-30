@@ -1,7 +1,9 @@
 import sqlite3
 
+# --- Inicialización de la Base de Datos ---
 def crear_db():
     try:
+        # Conexión y creación del archivo local .db
         conexion = sqlite3.connect('mensajes.db')
         cursor = conexion.cursor()
         
